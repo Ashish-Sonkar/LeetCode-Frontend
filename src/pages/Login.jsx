@@ -1,6 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { loginUser } from '../authSlice';
+import { useEffect } from 'react';
 
 // Schema validation for signup form
 
@@ -10,11 +14,21 @@ const signupSchema = z.object({
 })
 
 function Login() {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const { isAuthenticated, loading, error } = useSelector((state) => state.auth)
+
 
     const { register, handleSubmit, formState: { errors }, } = useForm({ resolver: zodResolver(signupSchema) });
+    
+    useEffect(()=>{
+        if(isAuthenticated){
+            navigate("/")
+        }
+    },[isAuthenticated,navigate])
 
     const onSubmit = (data) => {
-        console.log(data)
+        dispatch(loginUser(data))
     }
 
     return (
