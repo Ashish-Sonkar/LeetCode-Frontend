@@ -119,7 +119,7 @@ function Homepage() {
                                 <div className="card-body">
                                     <div className="flex items-center justify-between">
                                         <h2 className="card-title" >
-                                            <NavLink to="/problem/:problemId" >{problem.title}</NavLink>
+                                            <NavLink to={`/problem/${problem._id}`} className="hover:text-primary">{problem.title}</NavLink>
                                         </h2>
                                         {solvedProblems.some(sp => sp._id === problem._id) && (
                                             <div className="badge badge-success gap-2">
