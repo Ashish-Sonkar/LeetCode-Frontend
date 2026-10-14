@@ -8,6 +8,14 @@ import { useParams } from 'react-router'
 
 import axiosClient from '../utils/axiosClient'
 
+import SubmissionHistory from '../components/SubmissionHistory'
+
+const languageMap = {
+    javascript: 'JavaScript',
+    java: 'Java',
+    cpp: 'C++',
+};
+
 const ProblemPage = () => {
 
     const [problem, setProblem] = useState(null)
@@ -42,15 +50,9 @@ const ProblemPage = () => {
 
                 const response = await axiosClient.get(`/problem/getProblemById/${problemId}`)
 
-                const languageMap = {
-                    javascript: 'Javascript',
-                    java: 'Java',
-                    cpp: 'C++',
-                };
-
                 const initialCode = response.data.startCode?.find(
                     (sc) => sc.language === languageMap[selectedLanguage]
-                )?.initialCode || '';
+                )?.initialCode;
 
                 setProblem(response.data)
 
@@ -78,8 +80,8 @@ const ProblemPage = () => {
 
         if (problem) {
 
-            const languageMap = { javascript: 'Javascript', java: 'Java', cpp: 'C++' };
-            const initialCode = problem.startCode?.find(sc => sc.language === languageMap[selectedLanguage])?.initialCode || ''
+
+            const initialCode = problem.startCode?.find(sc => sc.language === languageMap[selectedLanguage])?.initialCode
 
             setCode(initialCode)
 
@@ -415,7 +417,7 @@ const ProblemPage = () => {
 
                                     <div className='text-gray-500' >
 
-                                        Your submission history will appear here.
+                                        <SubmissionHistory problemId={problemId} />
 
                                     </div>
 

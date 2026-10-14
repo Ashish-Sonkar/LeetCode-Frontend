@@ -83,22 +83,6 @@ function Admin(){
                         )
                     })}
                 </div>
-
-                {/* Selected Option Display */}
-                {selectedOption && (
-                    <div className="mt-8 max-w-2xl mx-auto" >
-                        <div className="alert alert-info" >
-                            <div className="flex items-center gap-2" >
-                                <selectedOption.icon size={20} />
-                                <span>
-                                    You selected:<strong>{selectedOption.title}</strong>
-                                    <br/>
-                                    <small>In your app, this would navigate to:{selectedOption.route}</small>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
 
