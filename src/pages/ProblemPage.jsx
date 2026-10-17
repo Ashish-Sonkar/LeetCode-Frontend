@@ -10,6 +10,8 @@ import axiosClient from '../utils/axiosClient'
 
 import SubmissionHistory from '../components/SubmissionHistory'
 
+import ChatAi from '../components/ChatAi'
+
 const languageMap = {
     javascript: 'JavaScript',
     java: 'Java',
@@ -283,6 +285,16 @@ const ProblemPage = () => {
 
                     </button>
 
+                    <button
+
+                        className={`tab ${activeLeftTab === 'chatAI' ? 'tab-active' : ''}`}
+
+                        onClick={() => setActiveLeftTab('chatAI')}
+
+                    >ChatAI
+
+                    </button>
+
                 </div>
 
                 {/* Left Content */}
@@ -424,6 +436,23 @@ const ProblemPage = () => {
                                 </div>
 
                             )}
+
+                            {activeLeftTab === 'chatAI' && (
+
+                                <div className='prose max-w-none'>
+
+                                    <h2 className='text-xl font-bold mb-4' >CHAT with AI</h2>
+
+                                    <div className='whitespace-pre-wrap text-sm leading-relaxed' >
+
+                                        <ChatAi problem={problem} />
+
+                                    </div>
+
+                                </div>
+
+                            )}
+                            
 
                         </>
 
