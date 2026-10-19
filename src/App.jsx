@@ -7,6 +7,8 @@ import AdminPanel from "./components/AdminPanel";
 import AdminDelete from "./components/AdminDelete"
 import AdminVideo from "./components/AdminVideo";
 import AdminUpload from "./components/AdminUpload";
+import AdminUpdate from "./components/AdminUpdate";
+import AdminEditProblem from "./components/AdminEditProblem";
 import { checkAuth } from "./authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -40,6 +42,8 @@ function App() {
         <Route path="/admin/delete" element={isAuthenticated && user?.role === "admin" ? (<AdminDelete></AdminDelete>) : (<Navigate to="/" />)}></Route>
         <Route path="/admin/video" element={isAuthenticated && user?.role === "admin" ? (<AdminVideo></AdminVideo>) : (<Navigate to="/" />)}></Route>
         <Route path="/admin/upload/:problemId" element={isAuthenticated && user?.role === "admin" ? (<AdminUpload></AdminUpload>) : (<Navigate to="/" />)}></Route>
+        <Route path="/admin/update" element={isAuthenticated && user?.role === "admin" ? (<AdminUpdate></AdminUpdate>) : (<Navigate to="/" />)}></Route>
+        <Route path="/admin/update/:id" element={isAuthenticated && user?.role === "admin" ? (<AdminEditProblem></AdminEditProblem>) : (<Navigate to="/" />)}></Route>
         <Route path="/problem/:problemId" element={<ProblemPage></ProblemPage>} ></Route>
       </Routes>
     </>

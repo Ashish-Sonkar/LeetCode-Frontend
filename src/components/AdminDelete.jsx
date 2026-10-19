@@ -1,10 +1,13 @@
+
 import { useEffect, useState } from "react"
 import axiosClient from "../utils/axiosClient"
+import { Search, Trash2, Database, Code2, SlidersHorizontal, Info } from "lucide-react"
 
 const AdminDelete = () => {
     const [problems, setProblems] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [search, setSearch] = useState("")
 
     useEffect(() => {
         fetchProblems()
@@ -13,10 +16,11 @@ const AdminDelete = () => {
     const fetchProblems = async () => {
         try {
             setLoading(true)
-            const { data } = await axiosClient.get('/problem/getAllProblem')
+            setError(null)
+            const { data } = await axiosClient.get("/problem/getAllProblem")
             setProblems(data)
         } catch (err) {
-            setError('Failed to fetch problems')
+            setError("Failed to fetch problems")
             console.error(err)
         } finally {
             setLoading(false)
@@ -24,98 +28,229 @@ const AdminDelete = () => {
     }
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this problem?')) return;
+        if (!window.confirm("Are you sure you want to delete this problem?")) return
 
         try {
             await axiosClient.delete(`/problem/delete/${id}`)
-            setProblems(problems.filter(problem => problem._id !== id))
+            setProblems(prev => prev.filter(problem => problem._id !== id))
         } catch (err) {
-            setError('Failed to delete problems')
+            setError("Failed to delete problem. Please try again.")
             console.error(err)
         }
     }
 
+    const filteredProblems = problems.filter(problem =>
+        problem.title?.toLowerCase().includes(search.trim().toLowerCase())
+    )
+
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-64" >
-                <span className="loading loading-spinner loading-lg" ></span>
-            </div>
-        )
-    }
-
-    if (error) {
-        return (
-            <div className="alert alert-error shadow-lg my-4" >
-                <div>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="stroke-current flex-shrink-0 h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
-                        />
-                    </svg>
-                    <span>{error}</span>
-                </div>
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <span className="loading loading-spinner loading-lg text-blue-600"></span>
             </div>
         )
     }
 
     return (
-        <div className="container mx-auto p-4" >
-            <div className="flex justify-between items-center mb-6" >
-                <h1 className="text-3xl font-bold" >Delete Problems</h1>
-            </div>
+        <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-10">
+            <div className="mx-auto max-w-7xl">
 
-            <div className="overflow-x-auto" >
-                <table className="table table-zebra w-full" >
-                    <thead>
-                        <tr>
-                            <th className="w-1/12" >#</th>
-                            <th className="w-4/12" >Title</th>
-                            <th className="w-2/12" >Difficulty</th>
-                            <th className="w-3/12" >Tags</th>
-                            <th className="w-2/12" >Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {problems.map((problem, index) => (
-                            <tr key={problem._id} >
-                                <th>{index + 1}</th>
-                                <td>{problem.title}</td>
-                                <td>
-                                    <span className={`badge ${problem.difficulty === 'Easy'
-                                            ? 'badge-success'
-                                            : problem.difficulty === 'Medium'
-                                                ? 'badge-warning'
-                                                : 'badge-error'
-                                        }`} >
-                                        {problem.difficulty}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span className="badge badge-outline" >
-                                        {problem.tags}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div className="flex space-x-2" >
-                                        <button onClick={() => handleDelete(problem._id)} className="btn btn-sm btn-error" >Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                {/* Main Card */}
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+                    {/* Header */}
+                    <div className="flex flex-col justify-between gap-5 border-b border-slate-200 px-5 py-6 sm:flex-row sm:items-center sm:px-8 sm:py-7">
+                        <div className="flex items-center gap-4">
+                            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600">
+                                <Trash2 size={27} strokeWidth={1.8} />
+                            </div>
+
+                            <div>
+                                <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">
+                                    Delete Problems
+                                </h1>
+                                <p className="mt-1 text-sm text-slate-500 sm:text-base">
+                                    Manage your coding problems
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Total Problems */}
+                        <div className="flex items-center gap-4 rounded-xl border border-blue-100 bg-slate-50 px-5 py-4 sm:min-w-64">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                                <Database size={25} />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-slate-800">
+                                    {String(problems.length).padStart(2, "0")}
+                                </p>
+                                <p className="text-sm text-slate-500">Total Problems</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Search */}
+                    <div className="px-5 pt-6 sm:px-8">
+                        <div className="flex items-center gap-3">
+                            <div className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 transition focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-50">
+                                <Search size={21} className="shrink-0 text-slate-400" />
+
+                                <input
+                                    type="text"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    placeholder="Search problems by title..."
+                                    className="h-12 w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                                />
+
+                                {search && (
+                                    <button
+                                        onClick={() => setSearch("")}
+                                        className="shrink-0 text-sm text-slate-500 hover:text-slate-800"
+                                    >
+                                        Clear
+                                    </button>
+                                )}
+                            </div>
+
+                            <div
+                                title="Search by problem title"
+                                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500"
+                            >
+                                <SlidersHorizontal size={20} />
+                            </div>
+                        </div>
+
+                        <p className="mt-3 text-sm text-slate-500">
+                            Showing {filteredProblems.length} of {problems.length} problems
+                        </p>
+                    </div>
+
+                    {/* Error Message */}
+                    {error && (
+                        <div className="mx-5 mt-4 flex items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 sm:mx-8">
+                            <span>{error}</span>
+                            <button
+                                onClick={() => {
+                                    setError(null)
+                                    fetchProblems()
+                                }}
+                                className="shrink-0 font-semibold underline"
+                            >
+                                Retry
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Problems Table */}
+                    <div className="px-5 pb-6 pt-4 sm:px-8 sm:pb-8">
+                        <div className="overflow-x-auto rounded-xl border border-slate-200">
+                            <table className="w-full min-w-[760px] border-collapse text-left">
+                                <thead>
+                                    <tr className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                                        <th className="w-16 px-5 py-4 font-semibold">#</th>
+                                        <th className="px-5 py-4 font-semibold">Problem Details</th>
+                                        <th className="w-40 px-5 py-4 font-semibold">Difficulty</th>
+                                        <th className="w-36 px-5 py-4 font-semibold">Tags</th>
+                                        <th className="w-36 px-5 py-4 text-center font-semibold">Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody className="divide-y divide-slate-200">
+                                    {filteredProblems.map((problem, index) => (
+                                        <tr
+                                            key={problem._id}
+                                            className="transition-colors hover:bg-slate-50/80"
+                                        >
+                                            <td className="px-5 py-5 text-sm font-medium text-slate-600">
+                                                {index + 1}
+                                            </td>
+
+                                            <td className="px-5 py-5">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                                                        <Code2 size={23} />
+                                                    </div>
+
+                                                    <div>
+                                                        <p className="font-semibold text-slate-800">
+                                                            {problem.title}
+                                                        </p>
+                                                        <p className="mt-1 text-sm text-slate-500">
+                                                            #{index + 1} · {problem.tags}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="px-5 py-5">
+                                                <span
+                                                    className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-semibold ${
+                                                        problem.difficulty === "Easy"
+                                                            ? "bg-green-50 text-green-700 ring-1 ring-inset ring-green-200"
+                                                            : problem.difficulty === "Medium"
+                                                            ? "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200"
+                                                            : "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200"
+                                                    }`}
+                                                >
+                                                    {problem.difficulty}
+                                                </span>
+                                            </td>
+
+                                            <td className="px-5 py-5">
+                                                <span className="inline-flex rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-600">
+                                                    {problem.tags}
+                                                </span>
+                                            </td>
+
+                                            <td className="px-5 py-5 text-center">
+                                                <button
+                                                    onClick={() => handleDelete(problem._id)}
+                                                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:border-red-300 hover:bg-red-50 active:scale-[0.98]"
+                                                >
+                                                    <Trash2 size={17} />
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+
+                                    {filteredProblems.length === 0 && (
+                                        <tr>
+                                            <td colSpan={5} className="px-5 py-16 text-center">
+                                                <div className="flex flex-col items-center">
+                                                    <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                                        <Search size={26} />
+                                                    </div>
+                                                    <p className="font-semibold text-slate-700">
+                                                        No problems found
+                                                    </p>
+                                                    <p className="mt-1 text-sm text-slate-500">
+                                                        {search
+                                                            ? "Try searching with a different title."
+                                                            : "There are no problems to display."}
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Footer Note */}
+                        <div className="mt-6 flex items-start gap-3 text-sm text-slate-500">
+                            <Info size={19} className="mt-0.5 shrink-0 text-slate-400" />
+                            <p>
+                                Search by problem title to quickly find the problem you want to delete.
+                                Deleted problems are removed from this list.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )
-
 }
 
 export default AdminDelete
