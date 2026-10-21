@@ -21,7 +21,7 @@ const problemSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().min(1, 'Description is required'),
     difficulty: z.enum(['easy', 'medium', 'hard']),
-    tags: z.enum(['array', 'linkedList', 'graph', 'dp']),
+    tags: z.enum(['Array', 'LinkedList', 'Graph', 'Dynamic Programming', 'Basic Programming', 'Math', 'String']),
 
     visibleTestCases: z.array(
         z.object({
@@ -121,7 +121,7 @@ function AdminPanel() {
             title: '',
             description: '',
             difficulty: 'easy',
-            tags: 'array',
+            tags: 'Array',
 
             visibleTestCases: [
                 { input: '', output: '', explanation: '' }
@@ -170,8 +170,7 @@ function AdminPanel() {
             navigate('/')
         } catch (error) {
             alert(
-                `Error: ${
-                    error.response?.data?.message || error.message
+                `Error: ${error.response?.data?.message || error.message
                 }`
             )
         }
@@ -234,9 +233,8 @@ function AdminPanel() {
                                 <input
                                     {...register('title')}
                                     placeholder="e.g. Two Sum"
-                                    className={`${inputClass} ${
-                                        errors.title ? 'input-error' : ''
-                                    }`}
+                                    className={`${inputClass} ${errors.title ? 'input-error' : ''
+                                        }`}
                                 />
 
                                 <FieldError message={errors.title?.message} />
@@ -254,9 +252,8 @@ function AdminPanel() {
                                     {...register('description')}
                                     rows={6}
                                     placeholder="Describe the problem, requirements and expected behavior..."
-                                    className={`${textAreaClass} min-h-36 resize-y ${
-                                        errors.description ? 'textarea-error' : ''
-                                    }`}
+                                    className={`${textAreaClass} min-h-36 resize-y ${errors.description ? 'textarea-error' : ''
+                                        }`}
                                 />
 
                                 <FieldError
@@ -274,9 +271,8 @@ function AdminPanel() {
 
                                     <select
                                         {...register('difficulty')}
-                                        className={`${inputClass} ${
-                                            errors.difficulty ? 'select-error' : ''
-                                        }`}
+                                        className={`${inputClass} ${errors.difficulty ? 'select-error' : ''
+                                            }`}
                                     >
                                         <option value="easy">Easy</option>
                                         <option value="medium">Medium</option>
@@ -297,14 +293,16 @@ function AdminPanel() {
 
                                     <select
                                         {...register('tags')}
-                                        className={`${inputClass} ${
-                                            errors.tags ? 'select-error' : ''
-                                        }`}
+                                        className={`${inputClass} ${errors.tags ? 'select-error' : ''
+                                            }`}
                                     >
-                                        <option value="array">Array</option>
-                                        <option value="linkedList">Linked List</option>
-                                        <option value="graph">Graph</option>
-                                        <option value="dp">Dynamic Programming</option>
+                                        <option value="Array">Array</option>
+                                        <option value="LinkedList">Linked List</option>
+                                        <option value="Graph">Graph</option>
+                                        <option value="Dynamic Programming">Dynamic Programming</option>
+                                        <option value="Basic Programming">Basic Programming</option>
+                                        <option value="Math">Math</option>
+                                        <option value="String">String</option>
                                     </select>
 
                                     <FieldError

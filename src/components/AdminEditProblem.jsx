@@ -22,7 +22,7 @@ const problemSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().min(1, 'Description is required'),
     difficulty: z.enum(['easy', 'medium', 'hard']),
-    tags: z.enum(['array', 'linkedList', 'graph', 'dp']),
+    tags: z.enum(['Array', 'LinkedList', 'Graph', 'Dynamic Programming', 'Basic Programming', 'Math', 'String']),
 
     visibleTestCases: z.array(
         z.object({
@@ -119,7 +119,7 @@ function AdminEditProblem() {
         title: '',
         description: '',
         difficulty: 'easy',
-        tags: 'array',
+        tags: 'Array',
 
         visibleTestCases: [
             { input: '', output: '', explanation: '' }
@@ -188,7 +188,7 @@ function AdminEditProblem() {
                     `/problem/getProblemById/${id}`
                 )
 
-                
+
 
                 // Supports either { problem: {...} } or direct problem data
                 const data = response.data
@@ -201,7 +201,7 @@ function AdminEditProblem() {
                 }
 
                 const allowedDifficulty = ['easy', 'medium', 'hard']
-                const allowedTags = ['array', 'linkedList', 'graph', 'dp']
+                const allowedTags = ['Array', 'LinkedList', 'Graph', 'Dynamic Programming', 'Basic Programming', 'Math', 'String']
 
                 const existingStartCode = Array.isArray(problem.startCode)
                     ? problem.startCode
@@ -223,11 +223,11 @@ function AdminEditProblem() {
 
                     tags: allowedTags.includes(problem.tags)
                         ? problem.tags
-                        : 'array',
+                        : 'Array',
 
                     visibleTestCases:
                         Array.isArray(problem.visibleTestCases) &&
-                        problem.visibleTestCases.length > 0
+                            problem.visibleTestCases.length > 0
                             ? problem.visibleTestCases.map(test => ({
                                 input: test.input ?? '',
                                 output: test.output ?? '',
@@ -237,7 +237,7 @@ function AdminEditProblem() {
 
                     hiddenTestCases:
                         Array.isArray(problem.hiddenTestCases) &&
-                        problem.hiddenTestCases.length > 0
+                            problem.hiddenTestCases.length > 0
                             ? problem.hiddenTestCases.map(test => ({
                                 input: test.input ?? '',
                                 output: test.output ?? ''
@@ -304,7 +304,10 @@ function AdminEditProblem() {
             alert('Problem updated successfully!')
             navigate('/admin/update')
         } catch (error) {
-            console.error('Update problem error:', error)
+            console.error(
+                'Update problem error:',
+                error.response?.data || error.message
+            )
 
             alert(
                 error.response?.data?.message ||
@@ -447,10 +450,13 @@ function AdminEditProblem() {
                                         {...register('tags')}
                                         className={inputClass}
                                     >
-                                        <option value="array">Array</option>
-                                        <option value="linkedList">Linked List</option>
-                                        <option value="graph">Graph</option>
-                                        <option value="dp">Dynamic Programming</option>
+                                        <option value="Array">Array</option>
+                                        <option value="LinkedList">Linked List</option>
+                                        <option value="Graph">Graph</option>
+                                        <option value="Dynamic Programming">Dynamic Programming</option>
+                                        <option value="Basic Programming">Basic Programming</option>
+                                        <option value="Math">Math</option>
+                                        <option value="String">String</option>
                                     </select>
 
                                     <FieldError message={errors.tags?.message} />

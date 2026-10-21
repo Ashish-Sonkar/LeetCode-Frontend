@@ -186,9 +186,9 @@ const AdminDelete = () => {
                                             <td className="px-5 py-5">
                                                 <span
                                                     className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-semibold ${
-                                                        problem.difficulty === "Easy"
+                                                        problem.difficulty?.toLowerCase()  === "easy"
                                                             ? "bg-green-50 text-green-700 ring-1 ring-inset ring-green-200"
-                                                            : problem.difficulty === "Medium"
+                                                            : problem.difficulty?.toLowerCase()  === "medium"
                                                             ? "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200"
                                                             : "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200"
                                                     }`}

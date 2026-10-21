@@ -616,7 +616,7 @@ function Homepage() {
                                                 ) : (
                                                     <>
                                                         <Circle size={15} className="text-slate-300" />
-                                                        <span className="text-slate-400">Todo</span>
+                                                        <span className="text-slate-400">Unsolved</span>
                                                     </>
                                                 )}
                                             </div>
