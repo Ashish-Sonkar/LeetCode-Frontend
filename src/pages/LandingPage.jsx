@@ -280,14 +280,6 @@ export default function LandingPage() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden items-center rounded-full border border-indigo-400/20 bg-[#0b1530] p-1 sm:flex">
-              <span className="rounded-full p-1.5 text-slate-400">
-                <Sun size={14} />
-              </span>
-              <span className="rounded-full bg-indigo-500/20 p-1.5 text-indigo-200">
-                <Moon size={14} />
-              </span>
-            </div>
 
             <Link
               to="/login"
